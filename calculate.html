@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculatrice</title>
+  <style>
+    @keyframes changeBackground {
+        0% { background-image: url('https://static.toiimg.com/photo/71277920.cms'); }
+        50% { background-image: url('https://www.cae.net/wp-content/uploads/2024/07/elearning-classroom.jpg'); }
+        100% { background-image: url('https://elearningindustry.com/wp-content/uploads/2023/11/Why-Are-Examples-Important-In-The-Teaching-And-Learning-Process.jpg'); }
+    }
+
+    body {
+        animation: changeBackground 15s infinite;
+        background-size: cover;
+        background-position: center;
+        min-height: 100vh;
+    }
+</style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+      tailwind.config = {
+          theme: {
+              extend: {
+                  colors: {
+                      clifford: '#a6bfef',
+                  }
+              }
+          }
+      }
+  </script>
+  
+</head>
+
+<body class="bg-gray-100 flex justify-center items-center h-screen">
+  
+  <div class="bg-white rounded-lg shadow-lg p-6 w-80 border-2 border-black w-[700px] h-[400px]">
+    <p class="text-2xl text-bold justify-center flex align-center my-5">MA CALCULATRICE</p>
+    <div id="result" class="bg-blue-200 text-right text-2xl p-4 rounded mb-4">
+      0
+    </div>
+    <div class="grid grid-cols-4 gap-2">
+      <!-- Boutons numériques -->
+      <button class="btn">7</button>
+      <button class="btn">8</button>
+      <button class="btn">9</button>
+      <button class="btn operator">/</button>
+      <button class="btn">4</button>
+      <button class="btn">5</button>
+      <button class="btn">6</button>
+      <button class="btn operator">*</button>
+      <button class="btn">1</button>
+      <button class="btn">2</button>
+      <button class="btn">3</button>
+      <button class="btn operator">-</button>
+      <button class="btn">0</button>
+      <button class="btn">.</button>
+      <button id="clear" class="btn bg-violet-500 hover:bg-violet-700  text-white">x</button>
+      <button class="btn operator">+</button>
+      <!-- Bouton égal -->
+      <button id="equals" class="col-span-4 bg-sky-500 hover:bg-sky-700 text-white py-2 rounded">=</button>
+    </div>
+  </div>
+
+  <script>
+    const resultDiv = document.getElementById("result");
+    const buttons = document.querySelectorAll(".btn");
+    const clearButton = document.getElementById("clear");
+    const equalsButton = document.getElementById("equals");
+
+    let currentInput = "";
+    let currentResult = 0;
+    let operator = null;
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const value = button.textContent;
+
+        // Ajoute des chiffres et des points
+        if (!isNaN(value) || value === ".") {
+          currentInput += value;
+          resultDiv.textContent = currentInput;
+        } else if (["+", "-", "*", "/"].includes(value)) {
+          // Applique une opération
+          if (currentInput) {
+            currentResult = currentResult
+              ? eval(`${currentResult} ${operator || "+"} ${currentInput}`)
+              : parseFloat(currentInput);
+          }
+          operator = value;
+          currentInput = "";
+          resultDiv.textContent = currentResult;
+        }
+      });
+    });
+
+    // Bouton "C" pour effacer
+    clearButton.addEventListener("click", () => {
+      currentInput = "";
+      currentResult = 0;
+      operator = null;
+      resultDiv.textContent = "0";
+    });
+
+    // Bouton "=" pour calculer
+    equalsButton.addEventListener("click", () => {
+      if (currentInput && operator) {
+        currentResult = eval(`${currentResult} ${operator} ${currentInput}`);
+        resultDiv.textContent = currentResult;
+        currentInput = "";
+        operator = null;
+      }
+    });
+  </script>
+</body>
+</html>
